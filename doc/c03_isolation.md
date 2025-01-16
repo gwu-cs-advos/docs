@@ -685,7 +685,7 @@ When you need to describe something with high specificity, you kind of have to m
 
 ### System Isolation Examples
 
-- Monolithic system is simply a set of processes $A = P \textbackslash p_{\text{kern}}$ (note that $A\textbackslash a$ means the set resulting from removing $a$ from set $A$), and the kernel $p_{\text{kern}}$, where $\forall_{p_i \in A, o \in \text{op}} d^o(p_i) = p_{\text{kern}}$.
+- Monolithic system is simply a set of processes $A = P \backslash p_{\text{kern}}$ (note that $A\backslash a$ means the set resulting from removing $a$ from set $A$), and the kernel $p_{\text{kern}}$, where $\forall_{p_i \in A, o \in \text{op}} d^o(p_i) = p_{\text{kern}}$.
 	This shows the centrality and concentration of trust in the large kernel.
 - VMs simply add a new layer to this: a set of VMs, $V$, with each VM, $V_x \in V$, consisting of a set of processes and kernel, $V_x = \{p_{i,x}, \ldots\} \cup p_{\text{kern}_x}$, with similar trust relationships $\forall_{V_x \in V, p_{i,x} \in V_x, o \in \text{op}} p_{\text{kern},x} \in d^o(p_{i,x})$.
 	Each VM kernel and application has specific dependencies on the hypervisor, $p_{\text{hv}}$: $\forall_{V_x \in V, o \in \text{op}} d^o(p_{\text{kern},x}) = \{p_{\text{hv}}\}$ and $\forall_{V_x \in V, p_{i \neq \text{kern},x},  o \in \{\text{cpu, mem}\}} p_{\text{hv}} \in d^o(p_i)$.

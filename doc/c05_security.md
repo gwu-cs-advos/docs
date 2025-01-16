@@ -105,7 +105,7 @@ These are the modus operandi that we should follow by default, and depart from o
 
 - **Complete Mediation.**
 	As discussed above, we must ensure that all resource accesses must be properly authorized by the *refmon*.
-	If the *refmon* is "out of the loop" of some resource access decisions, it can challenging to maintain strong CIA.
+	If the *refmon* is "out of the loop" of some resource access decisions, it can be challenging to maintain strong CIA.
 	Note, that this implies that there are foolproof means for the *refmon* to know which principal is making the request, and to identify the requested resource.
 	For example, a CBOS kernel must know which protection domain is requesting capability access, look up the access in the proper, associated capability table, and indexing into it to find the resource.
 - **Least Privilege.**
