@@ -110,6 +110,8 @@ static void read_cb(uv_fs_t* req) {
   - fan-out requests
 - 2x efficiency = 0.5x hardware/power/heat
 
+> Extreme optimization here is a *competitive advantage*
+
 ---
 
 # Extreme Optimization
@@ -118,9 +120,9 @@ static void read_cb(uv_fs_t* req) {
 
 ## SR-71: Blackbird
 
-- 85K ft vs. 30K-42K ft commercial airplane
-- Mach 3.3 (2,193 mph, 3529 km/h) - LA$\to$DC in 64 min
 - Spy airplane, designed to *outrun* interceptors
+- **85K ft** vs. 30K-42K ft commercial airplane
+- **Mach 3.3** (2,193 mph, 3529 km/h) - LA$\to$DC in **64 min**
 
 ---
 
@@ -128,16 +130,17 @@ static void read_cb(uv_fs_t* req) {
 
 ---
 
-## Aerodynamics
+## Aerodynamics Challenges
 
-- Delta-wing - comparably little lift
+- Delta-wing - little wind resistance @ Mach 3.3
+  - comparably little lift
 - Couldn't take off w/ much fuel
   - Immediately "refuel" when in air
 - Landings at 200mph - parachutes for braking
 
 ---
 
-## Temperature
+## Thermal Challenges
 
 - Air resistance
   - Windscreen/wings ~600 F (316 C)
@@ -145,18 +148,19 @@ static void read_cb(uv_fs_t* req) {
 - Stored fuel in fuselage panels
   - Too hot for plastic bladder
   - Metal badder too heavy
-- Leaked JP-7 fuel on the ground
+- Leaked fuel on the ground
   - Till body panels expanded due to heat
   - Allowable within "drips per minute" limits
 - Titanium body (bought from the USSR!)
 
 ---
 
-## Fuel
+## JP-7 Fuel
 
 - JP-7 fuel w/ high combustion point (to handle the heat)
-- Uses Triethylborane (TEB) which explodes w/ atmosphere contact
+- Ignite fuel
   - most jets use igniter plugs (spark plugs) - does *nothing* with JP-7
+  - Uses Triethylborane (TEB) which explodes w/ atmosphere contact
 - Only 16 "shots" per take-off
 
 ---
@@ -184,6 +188,14 @@ Landing
 
 ---
 
+## Remake the World
+
+*Extreme performance* requires *extreme trade-offs*
+- willingness to start from scratch
+- cast out existing designs
+
+---
+
 # Demikernel: OS for Kernel-Bypass
 
 ---
@@ -192,7 +204,7 @@ Landing
 
 Get
 1. receive request
-2. access blob
+2. access blob on disk/cache
 3. send data reply
 
 Update
