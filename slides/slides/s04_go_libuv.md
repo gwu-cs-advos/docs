@@ -38,6 +38,30 @@ Programming language + runtime:
 
 ---
 
+## Ideal
+
+```mermaid
+flowchart TD
+	g0 --> m0
+	g1 --> p0
+	g2 --> p0
+	g3 --> m1
+	g4 --> p1
+	m0 --> p0
+	m1 --> p1
+	p0 --> core0
+	p1 --> core1
+	m0([m0])
+	m1([m1])
+	p0[\p0/]
+	p1[\p1/]
+	core1[/core1\]
+	core0[/core0\]
+
+```
+
+---
+
 ## Concurrency
 
 ---
@@ -60,6 +84,30 @@ Implemented at user-level
   - `read`, `write`, `chansend`, ...
 - APIs that **only** provide blocking behavior?
   - `open`, `creat`, `fstat`, ...
+
+---
+
+## Blocking
+
+```mermaid
+flowchart TD
+	gBLOCK --> m0
+	g1 --> p0
+	g2 --> p0
+	g3 --> m1
+	g4 --> p1
+	m0 --> p0
+	m1 --> p1
+	p0 ~~~ core0
+	p1 --> core1
+
+	m0([m0])
+	m1([m1])
+	p0[\p0/]
+	p1[\p1/]
+	core1[/core1\]
+	core0[/core0\]
+```
 
 ---
 
@@ -95,6 +143,54 @@ How does `go` do what user-level processes aren't allowed to do???
 
 ---
 
+## Concurrency Management w/ Blocking
+
+```mermaid
+flowchart TD
+	gBLOCK --> m0
+	g1 --> p0
+	g2 --> p0
+	g3 --> m1
+	g4 --> p1
+	m0 --> p0
+	m1 --> p1
+	p0 ~~~ core0
+	p1 --> core1
+
+	m0([m0])
+	m1([m1])
+	p0[\p0/]
+	p1[\p1/]
+	core1[/core1\]
+	core0[/core0\]
+```
+---
+
+## Concurrency Management w/ Blocking
+
+```mermaid
+flowchart TD
+	gBLOCK --> m0
+	g1 --> m2
+	g2 --> p0
+	g3 --> m1
+	g4 --> p1
+	m0 ~~~ p0
+	m1 --> p1
+	m2 --> p0
+	p0 --> core0
+	p1 --> core1
+	m0([m0])
+	m1([m1])
+	m2([m2])
+	p0[\p0/]
+	p1[\p1/]
+	core1[/core1\]
+	core0[/core0\]
+```
+
+---
+
 ## Managed Concurrency
 
 - `GOMAXPROCS` = # of `p` = # of system's logical cores
@@ -124,7 +220,7 @@ We want to be able to switch between threads, directly, at user-level
 
 ---
 
-```go [13|50-52|59|66-71|149,155|180,182|187,191-195|197|209|201,214-216|66-71|73-87|95-96,105,110|120]
+```go [13|50-52|59|66-71|149,155|177,180,182|187,191-195|197|209|201,214-216|66-71|73-87|95-96,105,110|120]
 /*
  * generic single channel send/recv
  * If block is not nil,
@@ -2025,3 +2121,7 @@ static void read_cb(uv_fs_t* req) {
 
 
 ```
+
+---
+
+Acknowledgements: Used Gemini to validate hypothesis, which resulted in much AI judgement of the human :brain:

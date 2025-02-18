@@ -124,13 +124,13 @@ static void read_cb(uv_fs_t* req) {
 
 ---
 
-<img src="resources/sr71.jpg">
+<img src="resources/sr71.jpg" width=120%>
 
 ---
 
 ## Aerodynamics
 
-- Had little lift
+- Delta-wing - comparably little lift
 - Couldn't take off w/ much fuel
   - Immediately "refuel" when in air
 - Landings at 200mph - parachutes for braking
@@ -146,7 +146,7 @@ static void read_cb(uv_fs_t* req) {
   - Too hot for plastic bladder
   - Metal badder too heavy
 - Leaked JP-7 fuel on the ground
-  - Till it expanded due to heat
+  - Till body panels expanded due to heat
   - Allowable within "drips per minute" limits
 - Titanium body (bought from the USSR!)
 
@@ -165,7 +165,7 @@ static void read_cb(uv_fs_t* req) {
 
 - Commercial supersonic aircraft London$\leftrightarrow$NYC
 - Mach 2.02
-- Delta-wing aerodynamics challenges
+- Delta-wing - aerodynamics challenges
 
 ---
 
@@ -242,11 +242,15 @@ $\to$ No interrupts
 
 ---
 
-<img src="resources/demikernel_echo.png">
+## Network Echo
+
+<img src="resources/demikernel_echo.png" width="110%">
 
 ---
 
-<img src="resources/demikernel_echo-sync-logging.png">
+## Echo + Logging
+
+<img src="resources/demikernel_echo-sync-logging.png" width="110%">
 
 ---
 
