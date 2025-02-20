@@ -875,6 +875,10 @@ The high-level description of the [`CLASS`](https://lwn.net/Articles/934679/) ma
 1. Descriptor (int) names
 2. Partitioned namespaces
 
+Requirements:
+- Must validate inputs, return errors if not valid
+- Cannot `assert` on input values
+
 ---
 
 # Shared vs. Partitioned Namespaces
@@ -901,6 +905,33 @@ Upsides:
 - Sharing by default, enabling
   1. enabling efficient allocation/use of resources, and
   2. ease of sharing and coordination among users/processes
+
+---
+
+## Shared Namespace: Infectious Trust
+
+Trust requirements through shared resources:
+- If resources are shared + writeable across clients, trust spans clients
+- Example: same *file accessible and writeable* to two users...
+- ...must *trust the other user* if you require file integrity
+
+**$\to$ decreases horizontal isolation**
+
+---
+
+## Shared Namespace: Ambient Authority
+
+Checks required on resource access if
+- shared resource namespace
+- clients only allowed access a subset of resources
+
+$\to$ Server checks on who can access which resource
+
+Called: Ambient authority
+- A constant security problem
+- Attacks on complex resolution functions
+
+Example: Filesystem!!!
 
 ---
 
