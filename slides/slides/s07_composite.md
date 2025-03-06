@@ -393,10 +393,8 @@ How does the kernel support this?
 
 ---
 
-## Example
-
-```c []
-/* Client */
+```c [1-14|16-34|34-36|42-51|43-61]
+/* Client (application) Component */
 int
 main()
 {
@@ -457,6 +455,11 @@ main()
 		sbrk();
 	}
 }
+
+
+
+
+
 ```
 
 ---
@@ -544,6 +547,30 @@ Data-structures
 When a frame has a type, its memory can be treated as "of that type".
 
 > Where `#define PAGE_ALIGNED __attribute__((aligned(4096)))`
+
+---
+
+```language-plantuml
+@startjson
+scale 3
+{
+	"Data-structures": "",
+	"frame_types": [
+		"UNTYPED",
+		"UNTYPED",
+		"VM",
+		"THREAD", "..."
+	],
+	"frames": [
+		"Frame 0: zeros",
+		"Frame 1: zeros",
+		"Frame 2: VM data",
+		"Frame 3: Thread",
+		"..."
+	]
+}
+@endjson
+```
 
 ---
 
@@ -797,6 +824,84 @@ block-beta
 
 ---
 
+```c [9-12|19-21|39-44|49-58|60-68]
+/* Client (application) Component */
+int
+main()
+{
+	/*
+	 * IPC call to the server component that manages
+	 * memory.
+	 *
+	 * At this point, our capability-table/page-table
+	 * doesn't include a page.
+	 */
+	char *mem = sbrk();
+	if (!mem) return -1;
+	use_mem(mem);
+
+	return 0;
+}
+
+/* Server/Manager component: tracks and allocates per-client memory */
+int
+sbrk(vaddr_t *ret)
+{
+	client_t client = authentication(); /* TODO later */
+	vaddr_t mem;
+
+	if (!client_has_spare_memory(client)) return -1;
+
+	/*
+	 * An interface for interacting with coreos (i.e.
+	 * the kernel) to allocate, then alias (share) a
+	 * page with the client.
+	 *
+	 * Allocate adds the page to our page-table (if
+	 * it wasn't already there), and share adds it
+	 * to the client's capability-table + page-table.
+	 */
+	if (page_alloc(&mem) == -1)             return -1;
+	memset((char *)mem, 0, 4096);
+	/*
+	 * Somehow take our capability reference to the
+	 * page, and create a capability in the client
+	 * to the page, so that it can access it!
+	 */
+	if (page_delegate(client, mem, ret) == -1) return -1;
+
+	return 0;
+}
+
+/* Client #2: Malicious */
+int
+main()
+{
+	vaddr_t mem;
+	while (1) {
+		/* DoS attempt! */
+		page_alloc(&mem);
+	}
+}
+
+/* Client #3: Malicious */
+int
+main()
+{
+	while (1) {
+		/* DoS attempt! */
+		sbrk();
+	}
+}
+
+
+
+
+
+```
+
+---
+
 ## Delegation via IPC
 
 IPC:
@@ -823,7 +928,7 @@ All system access rights are
 
 Treat capability-tables as resources
 - If a component has access to a capability table, <br>let the component copy capabilites into it
-d- New operation: `copy_cap`
+- New operation: `copy_cap`
 
 $^*$ simple to implement, conceptually challenging
 
