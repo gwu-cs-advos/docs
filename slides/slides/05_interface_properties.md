@@ -1115,7 +1115,22 @@ Non-interference can be hard to get right!
 
 ---
 
-## Data Aggregation
+## Data Aggregation: Interface Usage Pattern
+
+```c []
+data_update(handle, data);
+data_update(handle, data);
+data_update(handle, data);
+data_update(handle, data);
+/* ... */
+data_update(handle, data);
+```
+
+Might include "read" operations, and/or mixes of operations
+
+---
+
+## Data Aggregation: Batching
 
 $t$ = interface cost, $c$ = communication cost
 
@@ -1133,16 +1148,31 @@ Batching trades latency for throughput <!-- .element: class="fragment" data-frag
 
 ---
 
-## Data Aggregation: Batching Policies
+## **Data** Aggregation: Batching Policies
 
 - Batch based on concurrency up to $N$ - pipes
 - Time-bounded batching - up to $N$ or $t$
 
 ---
 
+## Data Aggregation: Temporal Locality
+
+Think:
+- Cache working set for "client" code: $N$ lines
+- Cache working set for "server" code: $M$ lines
+
+No batching: Each operation requires $N + M$ lines
+
+Batching: Number of operations use $N$ lines, **then** a number of operations use $M$ lines
+
+Biggest performance benefit (cache size = $L$):
+- $L > N \wedge L > M \wedge L < N + M$
+
+---
+
 ## Data Aggregation: Examples
 
-- Buffered I/O - batch up to `\n`
+- Buffered I/O - batch up to `\n` (`fwrite`, `printf`)
 - DMA ring buffers - batch up to a fixed # of I/O req/resp
 - UNIX pipes - batch up till pipe buffer size
 
@@ -1180,17 +1210,59 @@ sequenceDiagram
 
 ---
 
-## Action Aggregation
+## Data Aggregation: Optimization
+
+Associative interfaces
+- can reorder batched data processing
+- use multiple cores effectively
+
+Idempotent interfaces
+- "batch logic" can omit redundant operations in a batch
+
+---
+
+## Action Aggregation: Interface Usage Pattern
+
+```c []
+f(handle, a)
+g(handle, b)
+/* ...or... */
+r = h(handle, a)
+i(handle, r)
+```
+
+---
+
+## **Action** Aggregation
 
 *Optimization*:
 - Find common sequences of operations, and
-- move their composition into server components.
+- move their **logic** into server components.
 
 No aggregation of $N$ interface calls (each $t$):
 - $Nt$ overhead
 
 Aggregation of $N$ calls into one:
 - $t$ overhead
+
+---
+
+## Action Aggregation: Interface Usage Pattern
+
+```c []
+f(handle, a)
+g(handle, b)
+/* ...or... */
+r = h(handle, a)
+i(handle, r)
+```
+
+becomes
+
+```c []
+f_and_g(handle, a, b)
+h_and_i(handle, a)
+```
 
 ---
 
@@ -1240,7 +1312,7 @@ sequenceDiagram
 
 ---
 
-## Action Aggregation
+## Action Aggregation: Perspective
 
 **Optimization**:
 - Take orthogonal functions or APIs, and
