@@ -312,6 +312,30 @@ If interfaces use different namespaces, they speak *different languages*
 
 ---
 
+## Composability Examples
+
+- UNIX pipelines
+  - `fd`s and text streams
+- Plan 9 VFS
+  - EIAF and FS servers
+- Composite
+  - capabilities for PPC to compose OS features
+
+---
+
+## Composability Anti-Examples
+
+- `bind`/`connect` vs. `open`/`creat` - EIAF
+- vscode - composition via cut & paste?
+- browser extensions
+  - large # of separate APIs
+  - different namespaces from browser code, normal application code, or system abstractions
+- "full stack programming"
+  - separation of abstractions between front-end, business logic, back-end
+  - adaptor-based programming
+
+-v-
+
 ## Composability via VFS
 
 Linux unifies interfaces around `fd`s:
@@ -346,7 +370,7 @@ References many resources via fds
 - [`userfaultfd`](https://man7.org/linux/man-pages/man2/userfaultfd.2.html)
 - Even the function to set the namespace to be used [`setns`](https://man7.org/linux/man-pages/man2/setns.2.html) does so using fds that reference namespace files in a processes’ /proc entries…
 
----
+-v-
 
 ## Composability via VFS
 
@@ -359,7 +383,7 @@ In contrast, plan9 uses a uniform textual representation
   - `echo "connect 2048" /net/tcp/2/ctl` to set who can connect to the second process' socket
   - `cat /net/tcp/2/data` to read packets
 
----
+-v-
 
 ## Composability via Hierarchical Namespace
 
@@ -371,7 +395,7 @@ Using hierarchical FS namespace as a *program abstraction*:
 - the [`acme`](https://youtu.be/dP1xVpMPn8M?t=743) editor
 - the [plumber](http://9p.io/sys/doc/plumb.html) for expressive system messaging
 
----
+-v-
 
 ## Everything is a File
 
@@ -409,7 +433,7 @@ tcp/2 1 Established connect
 - [Networking in plan9](https://doc.cat-v.org/plan_9/4th_edition/papers/net/)
 - [Implementation and namespaces in plan9](https://doc.cat-v.org/plan_9/4th_edition/papers/9)
 
----
+-v-
 
 ## Plan 9 EIAF
 
@@ -424,7 +448,7 @@ The Thundering Herd: Amplifying Kernel Interference to Attack Response Times
 $ echo "<li>Gabriel Parmer, <span class="text-info">MY NEW PAPER</span></li>" >> /apps/firefox/home/ul/content
 ```
 
----
+-v-
 
 ## Implement App EIAF in Linux
 
@@ -442,7 +466,7 @@ block-beta
 	afs(["AppFS??"])
 ```
 
----
+-v-
 
 ## Implement App EIAF in Plan 9
 
@@ -488,7 +512,7 @@ a-->9p
 
 </div></div>
 
----
+-v-
 
 ## Plan 9 Interactions
 
@@ -504,7 +528,7 @@ sequenceDiagram
 	VFS->>client: fd = open(...)
 ```
 
----
+-v-
 
 ## Benefits - Composability
 
@@ -585,7 +609,7 @@ Why?
 
 A perspective on dependencies
 
-- What mechanisms is my abstraction providing to its clients?
+- What mechanisms are my abstraction providing to its clients?
   - often: what is the resource and its properites?
 - What are the policies it wishes to enable?
   - how are resources to be used?
@@ -629,11 +653,13 @@ The *semantic gap* for an abstraction/policy can often be bypassed by instead us
 
 ## Powerful Interfaces and Components
 
+**Polymorphism**: Extensible abstractions, clients unified around simple API
+
 **Composability**: Combine mechanisms $\to$ powerful policies
 
 **Orthogonality**: Make interfaces easier to combine
 
-**Mechanism/Policy**: Intentionally design the dependencies
+**Mechanism/Policy**: Intentionally design the dependencies to side-step leaky-abstractions & the semantic gap
 
 ---
 
